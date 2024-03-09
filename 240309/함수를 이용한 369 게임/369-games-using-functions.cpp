@@ -19,7 +19,7 @@ int main(){
     cin>>a>>b;
     int cnt=0;
     for(int i=a;i<=b;i++){
-        if(Contai(i)){cnt++;}
+        if(Is369numbers(i)){cnt++;}
     }
     cout<<cnt;
     return 0;
