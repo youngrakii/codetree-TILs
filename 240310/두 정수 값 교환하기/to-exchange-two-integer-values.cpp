@@ -1,18 +1,16 @@
 #include <iostream>
 using namespace std;
 
-int main() {
-   int a[2];
-   int n,m;
+void Swap(int &n, int &m){
+    int temp=n;
+    n=m;
+    m=temp;
+}
+int main(){
+    int n,m;
+    cin>>n>>m;
 
-   cin>>n>>m;
-   a[0]=n;
-   a[1]=m;
-
-   int temp=0;
-   temp=a[0];
-   a[0]=a[1];
-   a[1]=temp;
-   cout<<a[0]<<" "<<a[1];
+    Swap(n,m);
+    cout<<n<<" "<<m;
     return 0;
 }
