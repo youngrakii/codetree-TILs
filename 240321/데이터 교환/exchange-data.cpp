@@ -1,25 +1,23 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
-int main() {
-    // 여기에 코드를 작성해주세요.
+
+void change(int m, int k){
+    int temp = m;
+    m=k;
+    k=temp;
+}
+
+int main(){
     int a=5;
     int b=6;
     int c=7;
-
-    int temp1=a;
+    int temp=a;
     a=b;
-    b=temp1;
+    b=temp;
 
-    int temp2=c;
-    c=b;
-    c=temp2;
-
-    int temp3=a;
-    c=a;
-    a=temp3;
-
-    
-
+    int tmp=a;
+    a=c;
+    c=tmp; 
     cout<<a<<"\n";
     cout<<b<<"\n";
     cout<<c<<"\n";
