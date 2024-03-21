@@ -1,13 +1,9 @@
 #include <iostream>
 using namespace std;
 int main() {
-    // 여기에 코드를 작성해주세요.
-    int n1,n2,n3;
-    cin>>n1;
-    cin.get();
-    cin>>n2;
-    cin.get();
-    cin>>n3;
-    cout<<n1<<"-"<<n3<<"-"<<n2;
+    int a,x,y;
+    char c;
+    cin>>a>>c>>x>>c>>y;
+    cout<<0<<a<<c<<y<<c<<x;
     return 0;
 }
