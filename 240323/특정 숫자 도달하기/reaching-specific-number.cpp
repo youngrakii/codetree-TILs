@@ -19,7 +19,10 @@ int main() {
             avg=sum/10;
         }
     }
-    cout<<sum<<" "<<avg;
+    cout<<sum<<" ";
+    cout<<fixed;
+    cout.precision(1);
+    cout<<avg;
 
     return 0;
 }
