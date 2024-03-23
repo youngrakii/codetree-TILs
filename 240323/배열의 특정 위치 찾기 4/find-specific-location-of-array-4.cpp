@@ -5,15 +5,15 @@ int main() {
     int arr[10];
     int sum=0;
     int cnt=0;
-    for(int i=0;i<10;i++){
+
+    for(int i=0;i<10; i++){
         cin>>arr[i];
         if(arr[i]==0){
-            for(int j=0;j<i;j++){
-                if(arr[j]%2==0){
-                    sum+=arr[j];
-                    cnt++;
-                }
-            }
+            break;
+        }
+        if(arr[i]%2==0){
+            sum+=arr[i];
+            cnt++;
         }
     }
     cout<<cnt<<" "<<sum;
