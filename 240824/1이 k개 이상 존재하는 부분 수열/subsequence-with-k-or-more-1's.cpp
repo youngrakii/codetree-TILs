@@ -17,17 +17,17 @@ int main() {
     int count_one = 0;
     int min_length = INT_MAX;
 
-    for (int right = 0; right < n; ++right) {
+    for (int right = 0; right < n; right++) {
         if (sequence[right] == 1) {
-            ++count_one;
+            count_one++;
         }
 
         while (count_one >= k) {
             min_length = min(min_length, right - left + 1);
             if (sequence[left] == 1) {
-                --count_one;
+                count_one--;
             }
-            ++left;
+            left++;
         }
     }
 
