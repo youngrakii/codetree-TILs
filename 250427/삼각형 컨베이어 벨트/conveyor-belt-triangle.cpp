@@ -51,16 +51,19 @@ int main(){
     //출력:
 
     for(int i=0; i<n; i++){
-        cout<<l[i]<<" "<<"\n";
+        cout<<l[i]<<" ";
     }
+    cout<<endl;
 
     for(int i=0; i<n; i++){
-        cout<<r[i]<<" "<<"\n";
+        cout<<r[i]<<" ";
     }
+    cout<<endl;
 
     for(int i=0; i<n; i++){
-        cout<<d[i]<<" "<<"\n";
+        cout<<d[i]<<" ";
     }
+    cout<<endl;
 
     return 0;
 }
