@@ -1,41 +1,43 @@
 #include <iostream>
 #include <vector>
+ 
+#define MAX_N 8
 
 using namespace std;
 
-int n, m;
-vector<int> combination;
+// 변수 선언
+int n;
+bool visited[MAX_N + 1];
+vector<int> picked;
 
-// 방문한 원소들을 출력해줍니다.
-void PrintCombination() {
-    for(int i = 0; i < combination.size(); i++)
-        cout << combination[i] << " ";
-    cout << endl;
-}
-
-// 지금까지 뽑은 갯수와 뽑을지 말지를 결정할 숫자를 인자로 받습니다. 
-void FindCombination(int curr_num, int cnt) {
-
-    // n개의 숫자를 모두 탐색했으면 더 이상 탐색하지 않습니다.
-    if(curr_num == n+1) {
-        // 탐색하는 과정에서 m개의 숫자를 뽑은 경우 답을 출력해줍니다.
-        if(cnt == m)
-            PrintCombination();
+// 지금까지 선택한 수의 개수를 cnt라 했을 때
+// 계속 탐색을 이어서 진행합니다.
+void GetPermutation(int cnt) {
+    // 모든 원소를 선택했을 때, 해당 순열을 출력합니다.
+    if(cnt == n) {
+        for(int i = 0; i < (int) picked.size(); i++)
+            cout << picked[i] << " ";
+        cout << endl;
         return;
     }
 
-    // curr_num에 해당하는 숫자를 사용했을 때의 경우를 탐색합니다.
-    combination.push_back(curr_num);
-    FindCombination(curr_num + 1, cnt + 1);
-    combination.pop_back();
+    // 앞에서부터 하나씩 원소를 선택합니다.
+    for(int i = 1; i <= n; i++) {
+        if(visited[i]) continue;
+        visited[i] = true;
+        picked.push_back(i);
 
-    // curr_num에 해당하는 숫자를 사용하지 않았을 때의 경우를 탐색합니다.
-    FindCombination(curr_num + 1, cnt);
+        GetPermutation(cnt + 1);
+
+        visited[i] = false;
+        picked.pop_back();
+    }
 }
 
 int main() {
-    cin >> n >> m;
+    // 입력:
+    cin >> n;
 
-    FindCombination(1, 0);
+    GetPermutation(0);
     return 0;
 }
