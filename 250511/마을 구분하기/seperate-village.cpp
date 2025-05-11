@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-#define MAX_NUM 100
+#define MAX_NUM 25
 #define DIR_NUM 4
 
 using namespace std;
@@ -10,71 +10,74 @@ using namespace std;
 int n;
 int grid[MAX_NUM][MAX_NUM];
 bool visited[MAX_NUM][MAX_NUM];
-vector<int> block_sizes;
-int block_size;
+vector<int> people_nums;
+int people_num;
 
-// 방향 벡터 (우, 하, 좌, 상)
-int dx[DIR_NUM] = {0, 1, 0, -1};
-int dy[DIR_NUM] = {1, 0, -1, 0};
-
-// 격자 범위 내에 있는지 확인
+// 탐색하는 위치가 격자 범위 내에 있는지 여부를 반환합니다.
 bool InRange(int x, int y) {
     return x >= 0 && x < n && y >= 0 && y < n;
 }
 
-// 방문할 수 있는 위치인지 확인
-bool CanGo(int x, int y, int num) {
-    if (!InRange(x, y))
+// 탐색하는 위치로 움직일 수 있는지 여부를 반환합니다.
+bool CanGo(int x, int y) {
+    if(!InRange(x, y))
         return false;
-    if (visited[x][y] || grid[x][y] != num) // 같은 숫자로 이루어진 블록만 탐색
+
+    if(visited[x][y] || grid[x][y] == 0)
         return false;
+
     return true;
 }
 
-// DFS로 블록 탐색
-void DFS(int x, int y, int num) {
-    for (int dir = 0; dir < DIR_NUM; dir++) {
+void DFS(int x, int y) {
+    //0: 오른쪽, 1: 아래쪽, 2: 왼쪽, 3: 위쪽
+    int dx[DIR_NUM] = {0, 1, 0, -1};
+    int dy[DIR_NUM] = {1, 0, -1, 0};
+
+    // 네 방향에 각각에 대하여 DFS 탐색을 합니다.
+    for(int dir = 0; dir < DIR_NUM; dir++) {
         int new_x = x + dx[dir];
         int new_y = y + dy[dir];
 
-        if (CanGo(new_x, new_y, num)) {
+        if(CanGo(new_x, new_y)){
             visited[new_x][new_y] = true;
-            block_size++;
-            DFS(new_x, new_y, num);
+            // 마을에 존재하는 사람을 한 명 추가해줍니다.
+            people_num++;
+            DFS(new_x, new_y);
         }
     }
 }
 
 int main() {
     cin >> n;
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
             cin >> grid[i][j];
 
-    int total_blocks = 0;
-
-    // 격자의 각 위치에서 탐색 시작
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (!visited[i][j]) {
+    // 격자의 각 위치에서 탐색을 시작할 수 있는 경우
+    // 한 마을에 대한 DFS 탐색을 수행합니다.
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            if(CanGo(i, j)) {
+                // 해당 위치를 방문할 수 있는 경우 visited 배열을 갱신하고
+                // 새로운 마을을 탐색한다는 의미로 people_num을 1으로 갱신합니다.
                 visited[i][j] = true;
-                block_size = 1;
-                DFS(i, j, grid[i][j]);
+                people_num = 1;
 
-                // 블록이 4개 이상이면 터짐
-                if (block_size >= 4) {
-                    total_blocks++;
-                } else {
-                    block_sizes.push_back(block_size); // 터지지 않은 블록 크기 저장
-                }
+                DFS(i, j);
+
+                // 한 마을에 대한 탐색이 끝난 경우 마을 내의 사람 수를 저장합니다.
+                people_nums.push_back(people_num);
             }
         }
     }
 
-    // 터지지 않은 블록 중 최대 크기 찾기
-    int max_block_size = block_sizes.empty() ? 0 : *max_element(block_sizes.begin(), block_sizes.end());
+    // 각 마을 내 사람의 수를 오름차순으로 정렬합니다.
+    sort(people_nums.begin(), people_nums.end());
 
-    cout << total_blocks << " " << max_block_size << endl;
+    cout << (int) people_nums.size() << endl;
+    for(int i = 0; i < (int) people_nums.size(); i++)
+        cout << people_nums[i] << endl;
 
     return 0;
 }
