@@ -1,45 +1,62 @@
 #include <iostream>
+#include <tuple>
 #include <algorithm>
 
-#define MAX_NUM 1000
+#define MAX_N 1000
 
 using namespace std;
 
+// 변수 선언
 int n;
-int num[MAX_NUM][MAX_NUM];
-int dp[MAX_NUM][MAX_NUM];
+pair<int, int> segments[MAX_N];
 
-void Initialize() {
-    // 시작점의 경우 dp[0][0] = num[0][0]으로 초기값을 설정해줍니다
-    dp[0][0] = num[0][0];
-
-    // 최좌측 열의 초기값을 설정해줍니다.
-    for(int i = 1; i < n; i++)
-        dp[i][0] = min(dp[i-1][0], num[i][0]);
-
-    // 최상단 행의 초기값을 설정해줍니다.
-    for(int j = 1; j < n; j++)
-        dp[0][j] = min(dp[0][j-1], num[0][j]);
-}
+// dp[i] : x1 기준으로 정렬되어 있다는 가정 하에서
+//         i번째 선분을 끝으로
+//         겹치지 않게 선택할 수 있는 최대 선분의 수
+int dp[MAX_N];
 
 int main() {
+    // 입력:
     cin >> n;
+    for(int i = 0; i < n; i++) {
+        int x1, x2;
+        cin >> x1 >> x2;
+        segments[i] = make_pair(x1, x2);
+    }
 
+    // x1 기준으로 오름차순 정렬을 진행합니다.
+    sort(segments, segments + n);
+
+    for(int i = 0; i < n; i++) {
+        // 현재 선분이 시작 선분인 경우에는
+        // dp값이 1이 되므로
+        // 초기 셋팅은 1입니다.
+        dp[i] = 1;
+
+        // i번째 선분 선택 전에
+        // 바로 선택한 선분을 j라 했을 때 
+        // i, j 선분이 서로 겹치지 않는 경우 중 
+        // 선택 할 수 있는 선분의 최대 개수를 계산합니다.
+        for(int j = 0; j < i; j++) {
+            int x1_i;
+            tie(x1_i, ignore) = segments[i];
+
+            int x2_j;
+            tie(ignore, x2_j) = segments[j];
+            
+            // 이미 x1 순으로 정렬이 되어있기에
+            // x2[j] < x1[i]이기만 하면 두 선분은 겹치지 않습니다.
+            if(x2_j < x1_i)
+                dp[i] = max(dp[i], dp[j] + 1);
+        }
+    }
+
+    // 마지막으로 선택한 선분 위치가 i일 때의 경우 중
+    // 고를 수 있는 선분의 수가 가장 큰 경우를 고릅니다.
+    int ans = 0;
     for(int i = 0; i < n; i++)
-        for(int j = 0; j < n; j++)
-            cin >> num[i][j];
+        ans = max(ans, dp[i]);
 
-    // 초기값 설정
-    Initialize();
-
-    // 탐색하는 위치의 위에 값과 좌측 값 중에 큰 값과
-    // 해당 위치의 숫자 중에 최솟값을 구해줍니다.
-    for(int i = 1; i < n; i++)
-        for(int j = 1; j < n; j++)
-            dp[i][j] = min(max(dp[i-1][j], dp[i][j-1]), num[i][j]);
-
-
-    cout << dp[n-1][n-1];
-
+    cout << ans;
     return 0;
 }
